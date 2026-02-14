@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Alejandra - Nuestro Viaje</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, #fdf6f0 0%, #ffe6ee 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        .page {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto 60px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            color: #b76e79;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 3.2em;
+            margin-top: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 2.5em;
+            border-bottom: 2px dashed #ffb8c6;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-size: 1.25em;
+            margin-bottom: 20px;
+            text-align: left;
+            padding: 0 10px;
+        }
+
+        .photo-container {
+            margin: 30px auto;
+            max-width: 750px;
+        }
+
+        .photo-container img {
+            width: 100%;
+            max-height: none;
+            height: auto;
+            object-fit: contain;
+            border-radius: 15px;
+            border: 8px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            max-height: 550px;
+        }
+
+        .portada-container {
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        .portada-container img {
+            width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: contain;
+            border-radius: 15px;
+            border: 10px solid white;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-caption {
+            background: #fff9fb;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            border-left: 4px solid #b76e79;
+        }
+
+        .caption-title {
+            font-family: 'Playfair Display', serif;
+            color: #b76e79;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .caption-title::before {
+            content: "";
+        }
+
+        /* GALERÍA DEL SCROLL, AQUI IRAN LAS FOTOS RANDOM, AL PARECER */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .gallery-item {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+            background-color: #f8f8f8; /* Fondo para todas las imágenes */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            padding: 10px; /* Más padding para mejor presentación */
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        }
+
+        /* IMPORTANTE: TODAS las imágenes de la galería se muestran COMPLETAS */
+        .gallery-item img {
+            width: auto; /* Ancho automático según la imagen */
+            max-width: 100%; /* Máximo del contenedor */
+            height: auto; /* Altura automática */
+            max-height: 260px; /* Altura máxima para consistencia */
+            object-fit: contain; /* MOSTRAR IMAGEN COMPLETA */
+            display: block;
+            border-radius: 8px;
+            background-color: transparent; /* Transparente para no duplicar fondo */
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #b76e79, #d8a5b5);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2em;
+            margin-top: 30px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(183, 110, 121, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(183, 110, 121, 0.4);
+            background: linear-gradient(to right, #a05a66, #c895a3);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .signature {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5em;
+            color: #b76e79;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed #ffb8c6;
+        }
+
+        .heart {
+            color: #ff6b8b;
+            font-size: 1.3em;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .instructions {
+            font-size: 0.9em;
+            color: #888;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        /* PIE DE PÁGINA FIJO */
+        .page-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 15px 0;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            color: #b76e79;
+            font-size: 1.1em;
+            z-index: 1000;
+            border-top: 2px solid rgba(255, 184, 198, 0.3);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-footer p {
+            margin: 0;
+            text-align: center;
+            font-size: 1em;
+            padding: 0;
+            opacity: 0.9;
+        }
+
+        .page-footer .heart-footer {
+            color: #ff6b8b;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        /* CIERRE */
+        .closing-photo {
+            max-width: 500px;
+            margin: 30px auto;
+        }
+
+        .closing-photo img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 15px;
+            border: 8px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .closing-text {
+            font-size: 1.3em;
+            line-height: 1.8;
+            text-align: center;
+            padding: 20px;
+            background: #fff9fb;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .highlight {
+            color: #b76e79;
+            font-weight: bold;
+        }
+
+        .final-promise {
+            font-size: 1.2em;
+            font-style: italic;
+            color: #d8a5b5;
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #fff9fb;
+            border-radius: 10px;
+            border: 2px dashed #ffb8c6;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- PIE DE PÁGINA FIJO -->
+    <div class="page-footer">
+        <p>Hecho con <span class="heart-footer">❤️</span> por David para la mujer que lleva mi futuro en su mano derecha. Febrero 2025.</p>
+    </div>
+
+    <!-- ========== PÁGINA 1: PORTADA ========== -->
+    <div class="page active" id="page1">
+        <div class="portada-container">
+            <img src="portada.jpeg" alt="Nuestra foto especial">
+        </div>
+        <h1>Para <span class="heart">Alejandra</span></h1>
+        <p style="text-align: center; font-size: 1.4em; font-style: italic;">
+            Un viaje por algunos recuerdos (no tengo foto de todos jaja) que llevo en mi corazón</p>
+        <button class="btn" onclick="showPage(2)">Abrir mi corazón.</button>
+        <p class="instructions">Haz clic en el botón para comenzar este viaje</p>
+    </div>
+
+    <!-- ========== GALERÍA PRINCIPAL: 11 FOTOS ========== -->
+    <!-- PÁGINA 2: FOTO 1 -->
+    <div class="page" id="page2">
+        <h2>Capítulo 1: La Primera Vez que Te Hice Sonreír</h2>
+        <div class="photo-container">
+            <img src="1.JPEG" alt="Las primeras flores">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Retorno 108 & Churubusco - 10 de febrero, 2022</div>
+            <p><strong>Lo que pasó:</strong> El primer 14 de febrero que celebramos juntos. Le mandé flores por primera vez a una mujer y que bello que se trate de ti.</p>
+            <p><strong>Lo que sentí:</strong> Estaba nervioso porque no sabía nada de flores, pero solo pensaba en hacerte sonreír. Fue cuando entendí que tu felicidad empezaba a hacerme feliz a mí.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(1)">← Portada</button>
+            <button class="btn" onclick="showPage(3)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 3: FOTO 2 -->
+    <div class="page" id="page3">
+        <h2>Capítulo 2: El Reencuentro que Confirmó Todo</h2>
+        <div class="photo-container">
+            <img src="2.jpeg" alt="Reencuentro después de un tiempo">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Café cerca de tu casa - 25 de agosto, 2024</div>
+            <p><strong>Lo que pasó:</strong> Después de darnos un tiempo, volvimos a salir. Recién te habías puesto brackets.</p>
+            <p><strong>Lo que sentí:</strong> Estaba nervioso y triste porque estabas un poco distante (lo entiendo), pero al verte supe que me seguías gustando tanto como la última vez que te vi. Confirmé que lo que sentía era real y no murió con el tiempo.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(2)">← Anterior</button>
+            <button class="btn" onclick="showPage(4)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 4: FOTO 3 -->
+    <div class="page" id="page4">
+        <h2>Capítulo 3: La Sonrisa que Se Volvió De Mis Favoritas (todas me gustan)</h2>
+        <div class="photo-container">
+            <img src="3.jpg" alt="Tu sonrisa especial">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Nuestra cafetería favorita - 20 de septiembre, 2024</div>
+            <p><strong>Lo que pasó:</strong> Un día normal en uno de nuestros lugares favoritos, pero con esa sonrisa tuya tan especial que haces al ponerte nerviosa.</p>
+            <p><strong>Lo que sentí:</strong> Me di cuenta que quería ver esa sonrisa tan única todos los días. Se volvió mi favorita hasta el punto de hacerla mi fondo de pantalla. Cada vez que desbloqueo mi celular, recuerdo por qué me haces sentir en las nubes.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(3)">← Anterior</button>
+            <button class="btn" onclick="showPage(5)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 5: FOTO 4 -->
+    <div class="page" id="page5">
+        <h2>Capítulo 4: La Confianza de Tu Sueño</h2>
+        <div class="photo-container">
+            <img src="4.jpeg" alt="Durmiento juntos en Central de Pizzas">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Central de Pizzas - 7 de diciembre, 2024</div>
+            <p><strong>Lo que pasó:</strong> Teníamos una semana de novios. Te dio sueño y te empezabas a quedar dormida (que raro).</p>
+            <p><strong>Lo que sentí:</strong> Me da ternura que te de tanto sueño conmigo. Aunque a ti no te gusta dormir cuando estás conmigo, yo empecé a amar que tengas esa confianza conmigo. Siento el deber de proteger tu sueño y tu paz.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(4)">← Anterior</button>
+            <button class="btn" onclick="showPage(6)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 6: FOTO 5 -->
+    <div class="page" id="page6">
+        <h2>Capítulo 5: Parte de Tus Metas y Tu Familia</h2>
+        <div class="photo-container">
+            <img src="5.jpeg" alt="Recogiendo su primer coche">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Agencia Chevrolet - 9 de diciembre, 2024</div>
+            <p><strong>Lo que pasó:</strong> Te compraste tu primer coche y me pediste que acompañara a ti y a tu familia a recogerlo.</p>
+            <p><strong>Lo que sentí:</strong> Me encantó que me empezaras a hacer parte de tus metas y de tu familia. Sentí admiración y felicidad por ti, y me di cuenta que quiero estar ahí para apoyarte en el proceso de cada logro que alcances.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(5)">← Anterior</button>
+            <button class="btn" onclick="showPage(7)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 7: FOTO 6 -->
+    <div class="page" id="page7">
+        <h2>Capítulo 6: La Mujer que Me Inspira</h2>
+        <div class="photo-container">
+            <img src="6.jpeg" alt="Ayudándola a calificar exámenes">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Tu casa - 17 de marzo, 2025</div>
+            <p><strong>Lo que pasó:</strong> Me pusiste a ayudarte a calificar exámenes. Eres maestra y amas lo que haces (aunque no pagan tan bien).</p>
+            <p><strong>Lo que sentí:</strong> Te ayudo en lo que puedo porque a veces se te carga mucho el trabajo. Me inspiras a seguir dando el 100%, a ser dedicado y trabajador. Eres una mujer que lo tiene todo: pasión, inteligencia y corazón.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(6)">← Anterior</button>
+            <button class="btn" onclick="showPage(8)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 8: FOTO 7 -->
+    <div class="page" id="page8">
+        <h2>Capítulo 7: El Día que Supe lo Mucho que Te Amo</h2>
+        <div class="photo-container">
+            <img src="7.jpeg" alt="Paseo en La Marquesa">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 La Marquesa - 4 de mayo, 2025</div>
+            <p><strong>Lo que pasó:</strong> Fuimos a un lugar al que tu papá te llevaba de niña. Vimos un topo y tomamos pulque.</p>
+            <p><strong>Lo que sentí:</strong> Aquí me di cuenta de lo mucho que te amo, aunque me daba miedo dejarme llevar, por ser tan nuevo en esto. No dejaba de verte y pensar en lo afortunado que soy. Me encanta tu cabello, tu sonrisa, la manera en que me miras. Cada detalle de ti se me graba en el corazón.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(7)">← Anterior</button>
+            <button class="btn" onclick="showPage(9)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 9: FOTO 8 -->
+    <div class="page" id="page9">
+        <h2>Capítulo 8: Celebrar Tu Existencia</h2>
+        <div class="photo-container">
+            <img src="8.jpeg" alt="Su cumpleaños">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Tu cumpleaños!!! - 8 de noviembre, 2025</div>
+            <p><strong>Lo que pasó:</strong> Festejamos en tu casa con pastel, familia y amigos, luego fuimos a un antro.</p>
+            <p><strong>Lo que sentí:</strong> No me gustan mucho los antros, pero me hace feliz acompañarte y verte disfrutar. Quiero estar en todos tus cumpleaños porque mereces ser festejada cada día de tu bendita existencia. Eres la razón de que este mundo sea más bonito, o al menos el mío lo haces precioso.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(8)">← Anterior</button>
+            <button class="btn" onclick="showPage(10)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 10: FOTO 9 -->
+    <div class="page" id="page10">
+        <h2>Capítulo 9: Bad Bunny y Tu Felicidad</h2>
+        <div class="photo-container">
+            <img src="9.jpg" alt="Concierto de Bad Bunny">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 KFC y Concierto de Benito - 15 de diciembre, 2025</div>
+            <p><strong>Lo que pasó:</strong> No era fan de Bad Bunny, pero esa noche fue mágica en su concierto.</p>
+            <p><strong>Lo que sentí:</strong> Ahora me gusta Bad Bunny porque te vi disfrutar a uno de tus artistas favoritos. Cada que lo escucho pienso en ti: en cómo cantabas, gritabas, sonreías. Ver y sentir que eres feliz me llena el corazón, la vida, el alma.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(9)">← Anterior</button>
+            <button class="btn" onclick="showPage(11)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 11: FOTO 10 -->
+    <div class="page" id="page11">
+        <h2>Capítulo 10: Equipo para Construir Lo Que Sea (menos legos porque no los terminamos)</h2>
+        <div class="photo-container">
+            <img src="10.jpg" alt="Casa de jengibre">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Tu casa - 30 de diciembre, 2025</div>
+            <p><strong>Lo que pasó:</strong> Armamos una casa de jengibre juntos.</p>
+            <p><strong>Lo que sentí:</strong> Me encantan estos planes de novios. Pasar tiempo contigo es mi momento favorito. Ser un equipo para cumplir un objetivo, aunque sea armar una casa de jengibre, me hace pensar en todo lo que podemos construir juntos en la vida.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(10)">← Anterior</button>
+            <button class="btn" onclick="showPage(12)">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA 12: FOTO 11 -->
+    <div class="page" id="page12">
+        <h2>Capítulo 11: Mi Corazón Es Tuyo</h2>
+        <div class="photo-container">
+            <img src="11.jpeg" alt="Ella con el collar en forma de corazón">
+        </div>
+        <div class="photo-caption">
+            <div class="caption-title">📍 Tu cuarto(?) - 1 de agosto, 2025 (desfasado en el orden temporal, pero es lo que quiero que tengas presente)</div>
+            <p><strong>Lo que pasó:</strong> Una foto de ti usando el collar en forma de corazón que te regalé.</p>
+            <p><strong>Lo que sentí:</strong> Esta foto representa algo que no quiero que olvides: <span class="highlight">mi corazón es tuyo</span>. Vives en él desde hace mucho y creo que ya es más tuyo que mío. Te extraño cada segundo que no estoy junto a ti, y cuando estoy contigo, no dejo de verte y pensar en cuánto te amo y qué feliz me haces.</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showPage(11)">← Anterior</button>
+            <button class="btn" onclick="showPage(13)">Ver más momentos →</button>
+        </div>
+    </div>
+
+    <!-- ========== PÁGINA 13: GALERÍA SECUNDARIA CORREGIDA ========== -->
+    <div class="page" id="page13">
+        <h2>Nuestros Momentos Espontáneos (fotos bonitas y algunas random que te he tomado)</h2>
+        <p style="text-align: center; font-style: italic;">
+            Todas esas risas, miradas y locuras que no necesitan palabras...
+        </p>
+        
+        <div class="gallery-grid">
+            <!-- TODAS LAS IMÁGENES SE MUESTRAN COMPLETAS AHORA -->
+            <div class="gallery-item"><img src="c1.jpg" alt="Momento espontáneo 1"></div>
+            <div class="gallery-item"><img src="c2.jpg" alt="Momento espontáneo 2"></div>
+            <div class="gallery-item"><img src="c3.jpeg" alt="Momento espontáneo 3"></div>
+            <div class="gallery-item"><img src="c4.jpeg" alt="Momento espontáneo 4"></div>
+            <div class="gallery-item"><img src="c5.jpeg" alt="Momento espontáneo 5"></div>
+            <div class="gallery-item"><img src="c6.jpeg" alt="Momento espontáneo 6"></div>
+            <div class="gallery-item"><img src="c7.jpeg" alt="Momento espontáneo 7"></div>
+            <div class="gallery-item"><img src="c8.jpeg" alt="Momento espontáneo 8"></div>
+            <div class="gallery-item"><img src="c9.jpeg" alt="Momento espontáneo 9"></div>
+            <div class="gallery-item"><img src="c10.gif" alt="Gif especial nuestro"></div>
+        </div>
+        
+        <p style="text-align: center; margin-top: 30px; font-size: 1.2em;">
+            Cada una de estas fotos es un latido de felicidad que tengo muy presente.<br>
+            Sonrisas robadas, miradas cómplices, momentos que simplemente fueron y que quiero vivir aun más
+        </p>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="btn" onclick="showPage(12)">← Volver a la historia</button>
+            <button class="btn" onclick="showPage(14)">Ir al final →</button>
+        </div>
+        
+        <p class="instructions"> TE AMO MUCHO !!!</p>
+    </div>
+
+    <!-- ========== PÁGINA 14: CIERRE ========== -->
+    <div class="page" id="page14">
+        <h2>Nuestro Pasado, el Presente y un Futuro</h2>
+        
+        <div class="closing-photo">
+            <img src="final.jpeg" alt="Nuestra foto de cierre">
+        </div>
+        
+        <div class="closing-text">
+            <p><span class="highlight">Alejandra</span>, este viaje por algunos recuerdos es más que una colección de fotos. Es el mapa de cómo <span class="highlight">me transformaste</span>.</p>
+            
+            <p>Antes de ti, era un hombre incompleto. Tú no me "completaste" —me <span class="highlight">enseñaste</span>. Me enseñaste a sentir con todo el pecho, a dejar que la ternura y la vulnerabilidad no fueran debilidades, sino mi mayor fortaleza. Me enseñaste a vivir enamorado, no solo de ti, sino de la vida que construimos día a día.</p>
+            
+            <p>Cada uno de estos momentos que revivimos aquí fue un paso en mi transformación. De un hombre que solo existía, a un hombre que <span class="highlight">vive y siente</span> gracias a ti. Tu amor, tu ternura, tu forma de ver el mundo... me cambiaron para bien. Me hicieron más humano, más amoroso, más presente.</p>
+            
+            <p>Por eso, el anillo que hoy te doy no es solo un accesorio. Es mi promesa de que el hombre en el que me he convertido a tu lado, quiere caminar contigo hacia todo lo que viene. Es mi "sí" a nuestro futuro incierto, a vivir juntos miles de aventuras, a seguir creciendo juntos.</p>
+            
+            <p>Este viaje por nuestras memorias termina aquí, pero <span class="highlight">nuestro camino juntos, como novios apenas comienza</span>. Te prometo mi hoy, mi mañana y todos los días que vendrán.</p>
+            
+            <p style="font-size: 1.4em; margin-top: 30px; font-style: italic;">
+                Gracias por ser mi amiga, mi inspiración y el amor de mi vida.
+            </p>
+        </div>
+        
+        <div class="final-promise">
+            <p>Y si alguna vez dudas de mi amor, recuerda:<br>
+            <strong>Mi promesa está presente en tu mano derecha,<br>
+            y mi corazón vive en cada recuerdo que compartimos.</strong></p>
+        </div>
+        
+        <div class="signature">
+            Con todo mi amor, hoy y siempre,<br>
+            <span class="heart">David</span><br>
+            14 de febrero de 2026
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="showPage(1)">❤️ Volver al principio de este viaje ❤️</button>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageNumber) {
+            // Oculta todas las pág
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Muestra la página solicitada
+            const pageToShow = document.getElementById('page' + pageNumber);
+            pageToShow.classList.add('active');
+            
+            // Desplaza al inicio de la pág
+            window.scrollTo(0, 0);
+        }
+
+        // Asegurar que solo la primera página sea visible al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage(1);
+        });
+    </script>
+</body>
+</html>
